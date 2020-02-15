@@ -1,0 +1,1947 @@
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+\documentclass{article}
+
+
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for grffile with XeLaTeX
+    \def\Gread@@xetex#1{%
+      \IfFileExists{"\Gin@base".bb}%
+      {\Gread@eps{\Gin@base.bb}}%
+      {\Gread@@xetex@aux#1}%
+    }
+    \makeatother
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{DA\_project\_final}
+    
+    
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{machine-learning-aided-record-linkage---a-comparison-between-different-methods}{%
+\section{Machine Learning aided Record Linkage - a comparison between
+different
+methods}\label{machine-learning-aided-record-linkage---a-comparison-between-different-methods}}
+
+\hypertarget{group-components}{%
+\subsection{Group Components}\label{group-components}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Francesco Porto} f.porto2@campus.unimib.it (816042)
+\item
+  \textbf{Francesco Stranieri} f.stranieri1@campus.unimib.it (816551)
+\item
+  \textbf{Mattia Vincenzi} m.vincenzi14@campus.unimib.it (860579)
+\end{itemize}
+
+\hypertarget{abstract}{%
+\subsection{Abstract}\label{abstract}}
+
+Record Linkage is the process of finding records in one or more datasets
+that refer to the same entity across different data sources.
+Traditionally, it is done by applying comparison rules between pairs of
+attributes from each dataset. In this project we investigate some
+possible Machine Learning applications to Record Linkage (and Data
+deduplication), and we compare them to the deterministic approach.
+
+\hypertarget{python-record-linkage-toolkit}{%
+\subsection{Python Record Linkage
+Toolkit}\label{python-record-linkage-toolkit}}
+
+Throughout the project, we make use of a Python library called
+\href{https://github.com/J535D165/recordlinkage/blob/master/docs/index.rst}{``Python
+Record Linkage Toolkit''}, which provides a simple framework to
+facilitate the process of Record Linkage. In the context of this
+library, the Record Linkage process is divided into 5 steps:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Preprocessing}: clean the datasets in order to improve the
+  chances of finding matches
+\item
+  \textbf{Indexing}: create pairs of records, called candidate links,
+  from each dataset
+\item
+  \textbf{Comparison}: compare record pairs via different algorithms,
+  thresholds, etc.
+\item
+  \textbf{Classification}: classify record pairs into matches or
+  non-matches
+\item
+  \textbf{Evaluation}: evaluate classification results
+\end{itemize}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \hypertarget{helper-functions}{%
+\subsection{Helper Functions}\label{helper-functions}}
+
+We have defined a few helper functions that allow us to streamline the
+Record Linkage process: - \textbf{Indexing\_dataset} : given two
+datasets, returns the result of the indexing process (either \emph{full}
+or \emph{block}) on the given attributes
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{itemize}
+\tightlist
+\item
+  \textbf{Compare\_records} : given two datasets, a set of rules
+  specifying how to compare some attributes, and a list of attributes
+  that must match exactly, returns a multi index containing the
+  comparisons' results.
+\end{itemize}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{itemize}
+\tightlist
+\item
+  \textbf{Evaluate\_results} : returns a confusion matrix of a given
+  classification method; also returns its precision, f-score and recall
+\end{itemize}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \hypertarget{chapter-1-record-linkage}{%
+\subsection{Chapter 1: Record Linkage}\label{chapter-1-record-linkage}}
+
+In this chapter we present two examples of Record Linkage, the first one
+using a \textbf{Full Index}, that is we make the cartesian product of
+the records in the first dataset and the records in the second one; the
+second one uses \textbf{Blocking}, a more optimal approach that only
+finds a subset of the cartesian product.
+
+\hypertarget{experiment-1-using-a-full-index}{%
+\subsection{Experiment 1: Using a Full
+index}\label{experiment-1-using-a-full-index}}
+
+\hypertarget{dataset-description}{%
+\subsubsection{Dataset description}\label{dataset-description}}
+
+We use the FEBRL (Freely Extensible Biomedical Record Linkage) dataset
+since it provides the \emph{true links} for optimal Record Linkage. The
+paper used as reference is available
+\href{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.481.8577\&rep=rep1\&type=pdf}{here}.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}51}]:} \PY{k+kn}{from} \PY{n+nn}{recordlinkage}\PY{n+nn}{.}\PY{n+nn}{datasets} \PY{k}{import} \PY{n}{load\PYZus{}febrl4}
+\end{Verbatim}
+
+    This dataset contains 10000 records (5000 originals and 5000 duplicates,
+with one duplicate per original); the originals have been split from the
+duplicates into dataset4a.csv (containing the 5000 original records) and
+dataset4b.csv (containing the 5000 duplicate records).
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Loading data{\ldots}
+5000 records in dataset A
+5000 records in dataset B
+5000 links between dataset A and B
+
+    \end{Verbatim}
+
+    We take a first look at the dataset. It contains auto-generated records
+about patients. There are 11 fields: - \textbf{rec\_id}: the id of the
+record - \textbf{given\_name}: the name of the patient -
+\textbf{street\_number}: the street number of the patient's house -
+\textbf{address\_1}: the road where the patient lives -
+\textbf{address\_2}: the city where the patient lives - \textbf{suburb}:
+the suburb in the city where the patient lives - \textbf{postcode}: the
+postcode of the city where the patient lives - \textbf{state}: the state
+where the patient lives - \textbf{date\_of\_birth}: the date of birth of
+the patient - \textbf{soc\_sec\_id}: the social security number of the
+patient
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+             given\_name    surname street\_number            address\_1  \textbackslash{}
+rec\_id                                                                  
+rec-1070-org   michaela    neumann             8       stanley street   
+rec-1016-org   courtney    painter            12    pinkerton circuit   
+rec-4405-org    charles      green            38  salkauskas crescent   
+rec-1288-org    vanessa       parr           905       macquoid place   
+rec-3585-org    mikayla   malloney            37        randwick road   
+{\ldots}                 {\ldots}        {\ldots}           {\ldots}                  {\ldots}   
+rec-2153-org    annabel   grierson            97   mclachlan crescent   
+rec-1604-org     sienna   musolino            22      smeaton circuit   
+rec-1003-org    bradley   matthews             2         jondol place   
+rec-4883-org     brodee       egan            88          axon street   
+rec-66-org        koula  houweling             3       mileham street   
+
+                        address\_2            suburb postcode state  \textbackslash{}
+rec\_id                                                               
+rec-1070-org                miami     winston hills     4223   nsw   
+rec-1016-org           bega flats         richlands     4560   vic   
+rec-4405-org                 kela             dapto     4566   nsw   
+rec-1288-org    broadbridge manor     south grafton     2135    sa   
+rec-3585-org              avalind  hoppers crossing     4552   vic   
+{\ldots}                           {\ldots}               {\ldots}      {\ldots}   {\ldots}   
+rec-2153-org        lantana lodge            broome     2480   nsw   
+rec-1604-org              pangani          mckinnon     2700   nsw   
+rec-1003-org         horseshoe ck       jacobs well     7018    sa   
+rec-4883-org          greenslopes          wamberal     2067   qld   
+rec-66-org    old airdmillan road      williamstown     2350   nsw   
+
+             date\_of\_birth soc\_sec\_id  
+rec\_id                                 
+rec-1070-org      19151111    5304218  
+rec-1016-org      19161214    4066625  
+rec-4405-org      19480930    4365168  
+rec-1288-org      19951119    9239102  
+rec-3585-org      19860208    7207688  
+{\ldots}                    {\ldots}        {\ldots}  
+rec-2153-org      19840224    7676186  
+rec-1604-org      19890525    4971506  
+rec-1003-org      19481122    8927667  
+rec-4883-org      19121113    6039042  
+rec-66-org        19440718    6375537  
+
+[5000 rows x 10 columns]
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    We notice that the records having the same numeric id represent the same
+entity.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+given\_name             michaela
+surname                 neumann
+street\_number                 8
+address\_1        stanley street
+address\_2                 miami
+suburb            winston hills
+postcode                   4223
+state                       nsw
+date\_of\_birth          19151111
+soc\_sec\_id              5304218
+Name: rec-1070-org, dtype: object
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+given\_name             michafla
+surname                 jakimow
+street\_number                 8
+address\_1        stanleykstreet
+address\_2                 miami
+suburb            winstonbhills
+postcode                   4223
+state                       NaN
+date\_of\_birth          19151111
+soc\_sec\_id              5304218
+Name: rec-1070-dup-0, dtype: object
+\end{Verbatim}
+    \hypertarget{indexing-full}{%
+\subsubsection{Indexing (Full)}\label{indexing-full}}
+
+Indexing is the process of creating all the possible links, also called
+\textbf{candidate links}, between the two datasets. In this specific
+example, we use a technique called \textbf{Full Indexing}, which returns
+the cartesian products of the records from each dataset.
+
+    \begin{figure}
+\centering
+\includegraphics{attachment:Schermata\%202020-02-15\%20alle\%2010.09.02.png}
+\caption{Schermata\%202020-02-15\%20alle\%2010.09.02.png}
+\end{figure}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+WARNING:recordlinkage:indexing - performance warning - A full index can result in large number of record pairs.
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+WARNING:recordlinkage:indexing - performance warning - A full index can result in large number of record pairs.
+
+    \end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+MultiIndex([('rec-1070-org',  'rec-561-dup-0'),
+            ('rec-1070-org', 'rec-2642-dup-0'),
+            ('rec-1070-org',  'rec-608-dup-0'),
+            ('rec-1070-org', 'rec-3239-dup-0'),
+            ('rec-1070-org', 'rec-2886-dup-0'),
+            ('rec-1070-org', 'rec-4285-dup-0'),
+            ('rec-1070-org',  'rec-929-dup-0'),
+            ('rec-1070-org', 'rec-4833-dup-0'),
+            ('rec-1070-org',  'rec-717-dup-0'),
+            ('rec-1070-org', 'rec-3984-dup-0'),
+            {\ldots}
+            (  'rec-66-org',  'rec-670-dup-0'),
+            (  'rec-66-org', 'rec-4134-dup-0'),
+            (  'rec-66-org', 'rec-3866-dup-0'),
+            (  'rec-66-org', 'rec-3152-dup-0'),
+            (  'rec-66-org', 'rec-3363-dup-0'),
+            (  'rec-66-org', 'rec-4495-dup-0'),
+            (  'rec-66-org', 'rec-4211-dup-0'),
+            (  'rec-66-org', 'rec-3131-dup-0'),
+            (  'rec-66-org', 'rec-3815-dup-0'),
+            (  'rec-66-org',  'rec-493-dup-0')],
+           names=['rec\_id\_1', 'rec\_id\_2'], length=25000000)
+\end{Verbatim}
+    \hypertarget{comparison}{%
+\subsubsection{Comparison}\label{comparison}}
+
+\textbf{Comparison} refers to the process of evaluating all the possible
+candidate links in order to figure out all the attributes having the
+same value. In order to compare attributes, we need to specify (for each
+attribute): * A \textbf{metric} to be used for evaluating the similarity
+between each pair of the same attributes of the different dataset * A
+\textbf{threshold} to decide under which circumstances the metric shall
+return 1 (the similarity is 1 in case of agreement) or 0 (in case of
+complete disagreement)
+
+    In this specific example we used the Jaro-Winkler method since,
+according to the documentation, it is faster than the Levenshtein
+distance and much faster than the Damerau-Levenshtein distance. Since
+comparing strings is computationally expensive, we chose a subset of
+attributes on which some errors are permitted.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+                             surname  address\_1  address\_2  given\_name  \textbackslash{}
+rec\_id\_1     rec\_id\_2                                                    
+rec-1070-org rec-561-dup-0       0.0        0.0        0.0           0   
+             rec-2642-dup-0      0.0        0.0        0.0           0   
+             rec-608-dup-0       0.0        0.0        0.0           0   
+             rec-3239-dup-0      0.0        0.0        0.0           0   
+             rec-2886-dup-0      0.0        0.0        0.0           0   
+{\ldots}                              {\ldots}        {\ldots}        {\ldots}         {\ldots}   
+rec-66-org   rec-4495-dup-0      0.0        0.0        0.0           0   
+             rec-4211-dup-0      0.0        0.0        0.0           0   
+             rec-3131-dup-0      0.0        0.0        0.0           0   
+             rec-3815-dup-0      0.0        0.0        0.0           0   
+             rec-493-dup-0       0.0        0.0        0.0           0   
+
+                             date\_of\_birth  suburb  state  
+rec\_id\_1     rec\_id\_2                                      
+rec-1070-org rec-561-dup-0               0       0      0  
+             rec-2642-dup-0              0       0      1  
+             rec-608-dup-0               0       0      0  
+             rec-3239-dup-0              0       0      0  
+             rec-2886-dup-0              0       0      0  
+{\ldots}                                    {\ldots}     {\ldots}    {\ldots}  
+rec-66-org   rec-4495-dup-0              0       0      1  
+             rec-4211-dup-0              0       0      0  
+             rec-3131-dup-0              0       0      0  
+             rec-3815-dup-0              0       0      0  
+             rec-493-dup-0               0       0      0  
+
+[25000000 rows x 7 columns]
+\end{Verbatim}
+    \textbf{Note}: no cardinality reduction is employed. The output of
+indexing phase has the same cardinality of the comparison phase. The
+columns represent the results of the comparison.
+
+    \hypertarget{classification}{%
+\subsubsection{Classification}\label{classification}}
+
+In this phase, candidate links are classified into matches or
+non-matches. We analyze 3 different classification methods: -
+\textbf{Deterministic approach} (no Machine Learning used) -
+\textbf{Naive Bayes} (Supervised Learning) -
+\textbf{Expectation-Conditional Maximisation} (Unsupervised Learning)
+
+\hypertarget{deterministic-approach}{%
+\paragraph{Deterministic approach}\label{deterministic-approach}}
+
+In the deterministic approach, we consider all the records that agree on
+at least a certain amount of attributes according to the rules we have
+previously specified.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+7.0        1304
+6.0        1860
+5.0        1260
+4.0         441
+3.0         452
+2.0       69727
+1.0     5634539
+0.0    19290417
+dtype: int64
+\end{Verbatim}
+    We notice that 1304 records have 7 common attributes, according to the
+comparison metrics that we chose. 1860 records have 6 common attributes
+instead, and so on.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    We consider a match all the pairs that agree on at least 4 attributes.
+In the following table, the matches according to this rule are shown.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+                             surname  address\_1  address\_2  given\_name  \textbackslash{}
+rec\_id\_1     rec\_id\_2                                                    
+rec-1016-org rec-1016-dup-0      1.0        1.0        0.0           1   
+rec-4405-org rec-4405-dup-0      1.0        1.0        1.0           1   
+rec-1288-org rec-1288-dup-0      1.0        1.0        1.0           1   
+rec-3585-org rec-3585-dup-0      1.0        1.0        1.0           1   
+rec-298-org  rec-298-dup-0       1.0        0.0        0.0           1   
+{\ldots}                              {\ldots}        {\ldots}        {\ldots}         {\ldots}   
+rec-2153-org rec-2153-dup-0      1.0        0.0        0.0           0   
+rec-1604-org rec-1604-dup-0      0.0        1.0        1.0           0   
+rec-1003-org rec-1003-dup-0      0.0        1.0        1.0           0   
+rec-4883-org rec-4883-dup-0      1.0        1.0        1.0           1   
+rec-66-org   rec-66-dup-0        1.0        1.0        1.0           1   
+
+                             date\_of\_birth  suburb  state  
+rec\_id\_1     rec\_id\_2                                      
+rec-1016-org rec-1016-dup-0              1       1      0  
+rec-4405-org rec-4405-dup-0              1       1      1  
+rec-1288-org rec-1288-dup-0              1       0      1  
+rec-3585-org rec-3585-dup-0              1       1      1  
+rec-298-org  rec-298-dup-0               1       1      1  
+{\ldots}                                    {\ldots}     {\ldots}    {\ldots}  
+rec-2153-org rec-2153-dup-0              1       1      1  
+rec-1604-org rec-1604-dup-0              1       1      1  
+rec-1003-org rec-1003-dup-0              1       0      1  
+rec-4883-org rec-4883-dup-0              1       1      1  
+rec-66-org   rec-66-dup-0                1       1      1  
+
+[4865 rows x 7 columns]
+\end{Verbatim}
+    \hypertarget{naive-bayes}{%
+\paragraph{Naive Bayes}\label{naive-bayes}}
+
+Naive Bayes is a supervised-learning algorithm that provides a method
+for computing the probability of a given hypotesis on prior knowledge.
+It is based on the assumption that all features are conditionally
+independent.
+
+    We initialise the NaiveBayesClassifier.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{nb\PYZus{}full} \PY{o}{=} \PY{n}{rl}\PY{o}{.}\PY{n}{NaiveBayesClassifier}\PY{p}{(}\PY{p}{)}
+\PY{n}{nb\PYZus{}full}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{features\PYZus{}full}\PY{p}{,} \PY{n}{true\PYZus{}links}\PY{p}{)}
+\end{Verbatim}
+
+    We print also the parameters that are trained. - p is the probability
+P(Match) - m is the probability that P(x\_i=1\textbar{}Match) - u is the
+probability that P(x\_i=1\textbar{}Non-Match)
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{p probability P(Match):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{nb\PYZus{}full}\PY{o}{.}\PY{n}{p}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{m probabilities P(x\PYZus{}i=1|Match):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{nb\PYZus{}full}\PY{o}{.}\PY{n}{m\PYZus{}probs}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{u probabilities P(x\PYZus{}i=1|Non\PYZhy{}Match):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{nb\PYZus{}full}\PY{o}{.}\PY{n}{u\PYZus{}probs}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{weights of features:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{nb\PYZus{}full}\PY{o}{.}\PY{n}{weights}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+p probability P(Match): 0.00019999999999999985
+
+m probabilities P(x\_i=1|Match): \{'surname': \{0.0: 0.14700001411999955, 1.0: 0.8529999858800007\}, 'address\_1': \{0.0: 0.11280001548799944, 1.0: 0.8871999845120011\}, 'address\_2': \{0.0: 0.23020001079199967, 1.0: 0.7697999892080011\}, 'given\_name': \{0.0: 0.3426000062959999, 1.0: 0.6573999937040006\}, 'date\_of\_birth': \{0.0: 0.10620001575199943, 1.0: 0.8937999842480008\}, 'suburb': \{0.0: 0.25420000983199964, 1.0: 0.7457999901680004\}, 'state': \{0.0: 0.05860001765599933, 1.0: 0.9413999823440014\}\}
+
+u probabilities P(x\_i=1|Non-Match): \{'surname': \{0.0: 0.9951189437847974, 1.0: 0.004881056215203998\}, 'address\_1': \{0.0: 0.9971519903941033, 1.0: 0.0028480096058983977\}, 'address\_2': \{0.0: 0.9987709141788471, 1.0: 0.0012290858211543999\}, 'given\_name': \{0.0: 0.9970409281816627, 1.0: 0.002959071818339998\}, 'date\_of\_birth': \{0.0: 0.9999744748909813, 1.0: 2.5525109021600138e-05\}, 'suburb': \{0.0: 0.9991115823124727, 1.0: 0.0008884176875304002\}, 'state': \{0.0: 0.7817865973172118, 1.0: 0.21821340268279102\}\}
+
+weights of features: \{'surname': \{0.0: 0.14772104886367185, 1.0: 174.75725504307687\}, 'address\_1': \{0.0: 0.11312218856768025, 1.0: 311.5157977959615\}, 'address\_2': \{0.0: 0.230483294541333, 1.0: 626.3191519734385\}, 'given\_name': \{0.0: 0.34361679306466497, 1.0: 222.1642575991257\}, 'date\_of\_birth': \{0.0: 0.10620272658817369, 1.0: 35016.50016427509\}, 'suburb': \{0.0: 0.2544260464318173, 1.0: 839.4699932653922\}, 'state': \{0.0: 0.07495653910810424, 1.0: 4.31412539637852\}\}
+
+    \end{Verbatim}
+
+    We tried to predict the matches starting by the output of the comparison
+phase, using the trained model. We know from the documentation that the
+total matches are 5000 and our model found 4958.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Predicted number of links: 4958
+
+    \end{Verbatim}
+
+    We predict the match probability for each pair in the dataset, since we
+apply the Full index method.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{probs\PYZus{}bayes\PYZus{}full} \PY{o}{=} \PY{n}{nb\PYZus{}full}\PY{o}{.}\PY{n}{prob}\PY{p}{(}\PY{n}{features\PYZus{}full}\PY{p}{)}
+\PY{n}{probs\PYZus{}bayes\PYZus{}full}
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+rec\_id\_1      rec\_id\_2      
+rec-1070-org  rec-561-dup-0     5.362010e-10
+              rec-2642-dup-0    3.086106e-08
+              rec-608-dup-0     5.362010e-10
+              rec-3239-dup-0    5.362010e-10
+              rec-2886-dup-0    5.362010e-10
+                                    {\ldots}     
+rec-66-org    rec-4495-dup-0    3.086106e-08
+              rec-4211-dup-0    5.362010e-10
+              rec-3131-dup-0    5.362010e-10
+              rec-3815-dup-0    5.362010e-10
+              rec-493-dup-0     5.362010e-10
+Length: 25000000, dtype: float64
+\end{Verbatim}
+    \hypertarget{expectation-conditional-maximisation}{%
+\paragraph{Expectation-Conditional
+Maximisation}\label{expectation-conditional-maximisation}}
+
+Unsupervised learning with the ECM algorithm. This classifier doesn't
+need training data since it is often hard to collect.
+
+    We initialise the Expectation-Conditional Maximisation classifier.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ecm\PYZus{}full} \PY{o}{=} \PY{n}{rl}\PY{o}{.}\PY{n}{ECMClassifier}\PY{p}{(}\PY{p}{)}
+\PY{n}{ecm\PYZus{}full}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{features\PYZus{}full}\PY{p}{)}
+\end{Verbatim}
+
+    We print the parameters that are trained (m, u and p).
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+p probability P(Match): 0.00019964038993562045
+
+m probabilities P(x\_i=1|Match): \{'surname': \{0.0: 0.14559845395438062, 1.0: 0.8544015460456198\}, 'address\_1': \{0.0: 0.11167423011028436, 1.0: 0.8883257698897149\}, 'address\_2': \{0.0: 0.22930633589775026, 1.0: 0.7706936641022502\}, 'given\_name': \{0.0: 0.3415113651654586, 1.0: 0.6584886348345418\}, 'date\_of\_birth': \{0.0: 0.10497269467212568, 1.0: 0.8950273053278734\}, 'suburb': \{0.0: 0.25371788422318436, 1.0: 0.7462821157768156\}, 'state': \{0.0: 0.05893559457665887, 1.0: 0.9410644054233418\}\}
+
+u probabilities P(x\_i=1|Non-Match): \{'surname': \{0.0: 0.9951189185968193, 1.0: 0.0048810814031804844\}, 'address\_1': \{0.0: 0.9971518971067167, 1.0: 0.002848102893281545\}, 'address\_2': \{0.0: 0.9987708161888874, 1.0: 0.0012291838111130658\}, 'given\_name': \{0.0: 0.9970409101739776, 1.0: 0.0029590898260201783\}, 'date\_of\_birth': \{0.0: 0.9999743984891409, 1.0: 2.5601510856925678e-05\}, 'suburb': \{0.0: 0.9991114106542701, 1.0: 0.0008885893457278089\}, 'state': \{0.0: 0.7817862701907439, 1.0: 0.21821372980925488\}\}
+
+weights of features: \{'surname': \{0.0: 0.1463126177519403, 1.0: 175.04349456022118\}, 'address\_1': \{0.0: 0.11199319826228323, 1.0: 311.9008698685735\}, 'address\_2': \{0.0: 0.22958854241730656, 1.0: 626.996269503714\}, 'given\_name': \{0.0: 0.3425249271926735, 1.0: 222.53080289900313\}, 'date\_of\_birth': \{0.0: 0.10497538220051303, 1.0: 34959.94085387161\}, 'suburb': \{0.0: 0.253943535743463, 1.0: 839.8503981223914\}, 'state': \{0.0: 0.07538581428691435, 1.0: 4.312581093068459\}\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Predicted number of links: 4958
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+rec\_id\_1      rec\_id\_2      
+rec-1070-org  rec-561-dup-0     5.170889e-10
+              rec-2642-dup-0    2.958100e-08
+              rec-608-dup-0     5.170889e-10
+              rec-3239-dup-0    5.170889e-10
+              rec-2886-dup-0    5.170889e-10
+                                    {\ldots}     
+rec-66-org    rec-4495-dup-0    2.958100e-08
+              rec-4211-dup-0    5.170889e-10
+              rec-3131-dup-0    5.170889e-10
+              rec-3815-dup-0    5.170889e-10
+              rec-493-dup-0     5.170889e-10
+Length: 25000000, dtype: float64
+
+    \end{Verbatim}
+
+    \hypertarget{evaluation}{%
+\subsubsection{Evaluation}\label{evaluation}}
+
+We compare the results of the deterministic method and the two ML-based
+ones (Naive Bayes and ECM)
+
+    \begin{figure}
+\centering
+\includegraphics{attachment:Schermata\%202020-02-15\%20alle\%2011.43.22.png}
+\caption{Schermata\%202020-02-15\%20alle\%2011.43.22.png}
+\end{figure}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Deterministic approach 
+
+Confusion matrix: 
+ [[    4865      135]
+ [       0 24995000]]
+Fscore: 0.9863152559553979
+Recall: 0.973
+Precision: 1.0
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Naive Bayes 
+
+Confusion matrix: 
+ [[    4954       46]
+ [       4 24994996]]
+Fscore: 0.9949789114279977
+Recall: 0.9908
+Precision: 0.9991932230738201
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Expectation-Conditional Maximisation 
+
+Confusion matrix: 
+ [[    4954       46]
+ [       4 24994996]]
+Fscore: 0.9949789114279977
+Recall: 0.9908
+Precision: 0.9991932230738201
+
+    \end{Verbatim}
+
+    \hypertarget{experiment-2-using-a-block-index}{%
+\subsection{Experiment 2 : Using a Block
+index}\label{experiment-2-using-a-block-index}}
+
+\hypertarget{indexing-block}{%
+\subsubsection{Indexing (Block)}\label{indexing-block}}
+
+Indexing is the process of creating all the possible links between the
+two datasets. In this specific example, we use a technique called
+\textbf{Blocking}, which groups together all the records that agree on
+AT LEAST one of the specified attributes.
+
+We have decided to use \textbf{surname}, \textbf{date\_of\_birth} and
+\textbf{soc\_sec\_id} as discriminating variables. By doing that, the
+resulting records will agree on at least one of these attributes.
+
+    \textbf{Note}: the cardinality using the Block index method is way less
+than the Full index method.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+MultiIndex([(  'rec-0-org',    'rec-0-dup-0'),
+            (  'rec-0-org', 'rec-1505-dup-0'),
+            (  'rec-0-org', 'rec-1636-dup-0'),
+            (  'rec-0-org', 'rec-2074-dup-0'),
+            (  'rec-0-org', 'rec-2683-dup-0'),
+            (  'rec-0-org', 'rec-2724-dup-0'),
+            (  'rec-0-org', 'rec-2894-dup-0'),
+            (  'rec-1-org',    'rec-1-dup-0'),
+            (  'rec-1-org', 'rec-1052-dup-0'),
+            (  'rec-1-org', 'rec-2552-dup-0'),
+            {\ldots}
+            ('rec-999-org', 'rec-3685-dup-0'),
+            ('rec-999-org',  'rec-370-dup-0'),
+            ('rec-999-org', 'rec-3766-dup-0'),
+            ('rec-999-org', 'rec-3862-dup-0'),
+            ('rec-999-org', 'rec-3913-dup-0'),
+            ('rec-999-org', 'rec-3940-dup-0'),
+            ('rec-999-org', 'rec-4941-dup-0'),
+            ('rec-999-org',  'rec-859-dup-0'),
+            ('rec-999-org',  'rec-911-dup-0'),
+            ('rec-999-org',  'rec-999-dup-0')],
+           names=['rec\_id\_1', 'rec\_id\_2'], length=87132)
+\end{Verbatim}
+    We verify that a pair of candidate links agree on the given attributes:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+given\_name               rachael
+surname                     dent
+street\_number                  1
+address\_1            knox street
+address\_2        lakewood estate
+suburb                    byford
+postcode                    4129
+state                        vic
+date\_of\_birth           19280722
+soc\_sec\_id               1683994
+Name: rec-0-org, dtype: object
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+given\_name               rachael
+surname                     dent
+street\_number                  4
+address\_1            knox street
+address\_2        lakewood estate
+suburb                    byford
+postcode                    4129
+state                        vic
+date\_of\_birth           19280722
+soc\_sec\_id               1683994
+Name: rec-0-dup-0, dtype: object
+\end{Verbatim}
+    \hypertarget{comparison}{%
+\subsubsection{Comparison}\label{comparison}}
+
+We used the same metrics and threshold for each pair of attributes used
+in the previous experiment.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+                            surname  address\_1  address\_2  given\_name  \textbackslash{}
+rec\_id\_1    rec\_id\_2                                                    
+rec-0-org   rec-0-dup-0         1.0        1.0        1.0           1   
+            rec-1505-dup-0      1.0        0.0        0.0           0   
+            rec-1636-dup-0      1.0        0.0        0.0           0   
+            rec-2074-dup-0      1.0        0.0        0.0           0   
+            rec-2683-dup-0      1.0        0.0        0.0           0   
+{\ldots}                             {\ldots}        {\ldots}        {\ldots}         {\ldots}   
+rec-999-org rec-3940-dup-0      1.0        0.0        0.0           0   
+            rec-4941-dup-0      1.0        0.0        0.0           0   
+            rec-859-dup-0       1.0        0.0        0.0           0   
+            rec-911-dup-0       1.0        0.0        0.0           0   
+            rec-999-dup-0       1.0        1.0        1.0           1   
+
+                            date\_of\_birth  suburb  state  
+rec\_id\_1    rec\_id\_2                                      
+rec-0-org   rec-0-dup-0                 1       1      1  
+            rec-1505-dup-0              0       0      0  
+            rec-1636-dup-0              0       0      0  
+            rec-2074-dup-0              0       0      1  
+            rec-2683-dup-0              0       0      0  
+{\ldots}                                   {\ldots}     {\ldots}    {\ldots}  
+rec-999-org rec-3940-dup-0              0       0      0  
+            rec-4941-dup-0              0       0      0  
+            rec-859-dup-0               0       0      0  
+            rec-911-dup-0               0       0      1  
+            rec-999-dup-0               1       1      1  
+
+[87132 rows x 7 columns]
+\end{Verbatim}
+    \hypertarget{classification}{%
+\subsubsection{Classification}\label{classification}}
+
+\hypertarget{deterministic-approach}{%
+\paragraph{Deterministic approach}\label{deterministic-approach}}
+
+Also in this case, we consider a match all the pairs that agree on at
+least 4 attributes.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+7.0     1304
+6.0     1857
+5.0     1257
+4.0      438
+3.0      268
+2.0    18304
+1.0    63704
+dtype: int64
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \hypertarget{naive-bayes}{%
+\paragraph{Naive Bayes}\label{naive-bayes}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Initialise the NaiveBayesClassifier.}
+\PY{n}{nb\PYZus{}block} \PY{o}{=} \PY{n}{rl}\PY{o}{.}\PY{n}{NaiveBayesClassifier}\PY{p}{(}\PY{p}{)}
+\PY{n}{nb\PYZus{}block}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{features\PYZus{}block}\PY{p}{,} \PY{n}{true\PYZus{}links}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+p probability P(Match): 0.05726943028967549
+
+m probabilities P(x\_i=1|Match): \{'surname': \{0.0: 0.1462925993469899, 1.0: 0.8537074006530102\}, 'address\_1': \{0.0: 0.11302606761418561, 1.0: 0.8869739323858145\}, 'address\_2': \{0.0: 0.23026053185328524, 1.0: 0.7697394681467138\}, 'given\_name': \{0.0: 0.34268537704667806, 1.0: 0.6573146229533218\}, 'date\_of\_birth': \{0.0: 0.10440883349062785, 1.0: 0.8955911665093714\}, 'suburb': \{0.0: 0.25430862708181856, 1.0: 0.7456913729181811\}, 'state': \{0.0: 0.05871745255641471, 1.0: 0.941282547443585\}\}
+
+u probabilities P(x\_i=1|Non-Match): \{'surname': \{0.0: 0.0077305166474385435, 1.0: 0.9922694833525615\}, 'address\_1': \{0.0: 0.9970904032112915, 1.0: 0.002909596788708342\}, 'address\_2': \{0.0: 0.9987338986176765, 1.0: 0.001266101382323047\}, 'given\_name': \{0.0: 0.9970173589710086, 1.0: 0.002982641028992133\}, 'date\_of\_birth': \{0.0: 0.9922329612324204, 1.0: 0.007767038767580439\}, 'suburb': \{0.0: 0.9990382496188591, 1.0: 0.0009617503811405855\}, 'state': \{0.0: 0.7818777232551495, 1.0: 0.21812227674485082\}\}
+
+weights of features: \{'surname': \{0.0: 18.924039106165434, 1.0: 0.8603584157084078\}, 'address\_1': \{0.0: 0.11335588754055481, 1.0: 304.8442780209312\}, 'address\_2': \{0.0: 0.2305524346094423, 1.0: 607.960372600173\}, 'given\_name': \{0.0: 0.3437105422119764, 1.0: 220.38006470240086\}, 'date\_of\_birth': \{0.0: 0.10522612891325946, 1.0: 115.30664302173464\}, 'suburb': \{0.0: 0.2545534439535616, 1.0: 775.3481439059377\}, 'state': \{0.0: 0.07509799909883542, 1.0: 4.315389337993445\}\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Predicted number of links: 5107
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+rec\_id\_1     rec\_id\_2      
+rec-0-org    rec-0-dup-0       1.000000e+00
+             rec-1505-dup-0    9.443910e-07
+             rec-1636-dup-0    9.443910e-07
+             rec-2074-dup-0    5.426506e-05
+             rec-2683-dup-0    9.443910e-07
+                                   {\ldots}     
+rec-999-org  rec-3940-dup-0    9.443910e-07
+             rec-4941-dup-0    9.443910e-07
+             rec-859-dup-0     9.443910e-07
+             rec-911-dup-0     5.426506e-05
+             rec-999-dup-0     1.000000e+00
+Length: 87132, dtype: float64
+\end{Verbatim}
+    \hypertarget{expectation-conditional-maximisation}{%
+\paragraph{Expectation-Conditional
+Maximisation}\label{expectation-conditional-maximisation}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Initialise the Expectation\PYZhy{}Conditional Maximisation classifier.}
+\PY{n}{ecm\PYZus{}block} \PY{o}{=} \PY{n}{rl}\PY{o}{.}\PY{n}{ECMClassifier}\PY{p}{(}\PY{p}{)}
+\PY{n}{ecm\PYZus{}block}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{features\PYZus{}block}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+p probability P(Match): 0.05890218346289975
+
+m probabilities P(x\_i=1|Match): \{'surname': \{0.0: 0.17208594081201783, 1.0: 0.8279140591879811\}, 'address\_1': \{0.0: 0.1364062789961936, 1.0: 0.863593721003806\}, 'address\_2': \{0.0: 0.25072440372196897, 1.0: 0.7492755962780303\}, 'given\_name': \{0.0: 0.36109752267741557, 1.0: 0.6389024773225834\}, 'date\_of\_birth': \{0.0: 0.1019492644528454, 1.0: 0.8980507355471536\}, 'suburb': \{0.0: 0.2754889672490091, 1.0: 0.7245110327509904\}, 'state': \{0.0: 0.06435714759255907, 1.0: 0.9356428524074404\}\}
+
+u probabilities P(x\_i=1|Non-Match): \{'surname': \{0.0: 0.00587574265639725, 1.0: 0.9941242573436027\}, 'address\_1': \{0.0: 0.9971608673018983, 1.0: 0.002839132698101932\}, 'address\_2': \{0.0: 0.9987863491894582, 1.0: 0.001213650810542423\}, 'given\_name': \{0.0: 0.9970001958451015, 1.0: 0.002999804154898576\}, 'date\_of\_birth': \{0.0: 0.9939272291845378, 1.0: 0.006072770815462413\}, 'suburb': \{0.0: 0.9990046632627301, 1.0: 0.0009953367372699084\}, 'state': \{0.0: 0.7827793845853916, 1.0: 0.21722061541460944\}\}
+
+weights of features: \{'surname': \{0.0: 29.287521744108087, 1.0: 0.832807421277747\}, 'address\_1': \{0.0: 0.13679465718031986, 1.0: 304.1751875779358\}, 'address\_2': \{0.0: 0.25102906535060127, 1.0: 617.3732920288273\}, 'given\_name': \{0.0: 0.3621840037567228, 1.0: 212.98139622857641\}, 'date\_of\_birth': \{0.0: 0.10257216168279153, 1.0: 147.88154581110624\}, 'suburb': \{0.0: 0.2757634447363513, 1.0: 727.9054470934519\}, 'state': \{0.0: 0.08221620147373528, 1.0: 4.307339110616076\}\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Predicted number of links: 5110
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+rec\_id\_1     rec\_id\_2      
+rec-0-org    rec-0-dup-0       1.000000
+             rec-1505-dup-0    0.000002
+             rec-1636-dup-0    0.000002
+             rec-2074-dup-0    0.000079
+             rec-2683-dup-0    0.000002
+                                 {\ldots}   
+rec-999-org  rec-3940-dup-0    0.000002
+             rec-4941-dup-0    0.000002
+             rec-859-dup-0     0.000002
+             rec-911-dup-0     0.000079
+             rec-999-dup-0     1.000000
+Length: 87132, dtype: float64
+
+    \end{Verbatim}
+
+    \hypertarget{evaluation}{%
+\subsubsection{Evaluation}\label{evaluation}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Deterministic approach 
+
+Confusion matrix: 
+ [[ 4856   144]
+ [    0 82132]]
+Fscore: 0.9853896103896103
+Recall: 0.9712
+Precision: 1.0
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Naive Bayes 
+
+Confusion matrix: 
+ [[ 4956    44]
+ [  151 81981]]
+Fscore: 0.9807064410804394
+Recall: 0.9912
+Precision: 0.9704327393773252
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Expectation-Conditional Maximisation 
+
+Confusion matrix: 
+ [[ 4959    41]
+ [  151 81981]]
+Fscore: 0.9810089020771513
+Recall: 0.9918
+Precision: 0.9704500978473581
+
+    \end{Verbatim}
+
+    \hypertarget{results-analysis}{%
+\subsection{Results Analysis}\label{results-analysis}}
+
+From the previous two experiments, we noticed that: - The cardinality of
+the candidate links with Full index method is 25000000, with the Block
+index is 87132. - This leads to a significative difference in the
+execution time: - The Full index takes 160 seconds circa for the
+comparison phase; the Block index takes about 0.56 seconds instead. -
+Naive Bayes takes about 150s with Full index and 0.23s with Block index.
+- ECM takes about 92s with Full index and 0.29s with Block index. - This
+does not lead to a significative difference in the evaluation results: -
+The Full index method brings a very small increase in the Fscore.
+
+We do not consider this result to be meaningful. Blocking should always
+be preferred, provided that it is clear what attributes should be used
+in the index.
+
+    \hypertarget{chapter-2-data-deduplication}{%
+\subsection{Chapter 2: Data
+Deduplication}\label{chapter-2-data-deduplication}}
+
+Data Deduplication is the process of linking a dataset to itself, in
+order to find duplicate records.
+
+    \hypertarget{experiment-3-creating-prediction-models}{%
+\subsection{Experiment 3 : Creating prediction
+models}\label{experiment-3-creating-prediction-models}}
+
+In this experiment, we first train our models on a smaller dataset.
+Then, we test the models on a bigger one with the \emph{same} attributes
+but with different distribution of duplicates.
+
+\hypertarget{part-1-training}{%
+\subsection{Part 1 : Training}\label{part-1-training}}
+
+\hypertarget{dataset-description}{%
+\subsubsection{Dataset description}\label{dataset-description}}
+
+This data set contains 5000 records (4000 originals and 1000
+duplicates), with a maximum of 5 duplicates based on one original record
+(and a poisson distribution of duplicate records). Distribution of
+duplicates: 19 originals records have 5 duplicate records 47 originals
+records have 4 duplicate records 107 originals records have 3 duplicate
+records 141 originals records have 2 duplicate records 114 originals
+records have 1 duplicate record 572 originals records have no duplicate
+record.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Loading data{\ldots}
+5000 records in dataset A
+1934 links between dataset A and A
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+              given\_name    surname street\_number         address\_1  \textbackslash{}
+rec\_id                                                                
+rec-2778-org       sarah      bruhn            44     forbes street   
+rec-712-dup-0      jacob     lanyon             5        milne cove   
+rec-1321-org     brinley  efthimiou            35  sturdee crescent   
+rec-3004-org     aleisha     hobson            54     oliver street   
+rec-1384-org       ethan    gazzola            49    sheaffe street   
+{\ldots}                  {\ldots}        {\ldots}           {\ldots}               {\ldots}   
+rec-1487-org      thomas      green            44     tuthill place   
+rec-1856-org       james    mcneill            42  archibald street   
+rec-3307-org       paige       lock             7  a'beckett street   
+rec-227-org      antonio    collier            25      govett place   
+rec-1143-org       harry       ryan            30  van raalte place   
+
+                address\_2              suburb postcode state date\_of\_birth  \textbackslash{}
+rec\_id                                                                       
+rec-2778-org   wintersloe        kellerberrin     4510   vic      19300213   
+rec-712-dup-0     wellwod  beaconsfield upper     2602   vic      19080712   
+rec-1321-org    tremearne         scarborough     5211   qld      19940319   
+rec-3004-org    inglewood           toowoomba     3175   qld      19290427   
+rec-1384-org   bimby vale          port pirie     3088    sa      19631225   
+{\ldots}                   {\ldots}                 {\ldots}      {\ldots}   {\ldots}           {\ldots}   
+rec-1487-org   holmeleigh         bonny hills     4740   vic      19420210   
+rec-1856-org          NaN          evans head     2250   nsw      19011207   
+rec-3307-org      camboon      carina heights     2290   nsw      19871002   
+rec-227-org     the rocks         broken hill     2304   qld      19400225   
+rec-1143-org        anana        preston west     2572    wa      19250425   
+
+              soc\_sec\_id  
+rec\_id                    
+rec-2778-org     7535316  
+rec-712-dup-0    9497788  
+rec-1321-org     6814956  
+rec-3004-org     5967384  
+rec-1384-org     3832742  
+{\ldots}                  {\ldots}  
+rec-1487-org     9334580  
+rec-1856-org     4837378  
+rec-3307-org     5142242  
+rec-227-org      3973395  
+rec-1143-org     6392122  
+
+[5000 rows x 10 columns]
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    We notice that the records having the same numeric id represent the same
+entity but with some errors in various attributes.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+given\_name                    jacob
+surname                      lanyon
+street\_number                     5
+address\_1                milne cove
+address\_2                  wellwood
+suburb           beaconsfield upper
+postcode                       2602
+state                           vic
+date\_of\_birth              19080712
+soc\_sec\_id                  9497788
+Name: rec-712-org, dtype: object
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+given\_name                    jacob
+surname                      lanyon
+street\_number                     5
+address\_1                milne cove
+address\_2                   wellwod
+suburb           beaconsfield upper
+postcode                       2602
+state                           vic
+date\_of\_birth              19080712
+soc\_sec\_id                  9497788
+Name: rec-712-dup-0, dtype: object
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+given\_name                    jacob
+surname                      lanyln
+street\_number                     5
+address\_1                milne cove
+address\_2                  wellwood
+suburb           beaconsfieod upper
+postcode                       2602
+state                           vic
+date\_of\_birth              19080712
+soc\_sec\_id                  9497788
+Name: rec-712-dup-1, dtype: object
+\end{Verbatim}
+    \hypertarget{indexing-block}{%
+\subsubsection{Indexing (Block)}\label{indexing-block}}
+
+We have decided to use \textbf{surname}, \textbf{date\_of\_birth} and
+\textbf{soc\_sec\_id} as discriminating variables. It's important to
+notice that the discriminating variables are the same throughout
+different experiments.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+MultiIndex([(    'rec-0-org', 'rec-3741-dup-0'),
+            (    'rec-0-org',   'rec-3741-org'),
+            (   'rec-10-org',   'rec-2162-org'),
+            (   'rec-10-org',    'rec-343-org'),
+            (   'rec-10-org',    'rec-956-org'),
+            ('rec-100-dup-0',    'rec-100-org'),
+            ('rec-100-dup-1',  'rec-100-dup-0'),
+            ('rec-100-dup-1',    'rec-100-org'),
+            ('rec-100-dup-2',  'rec-100-dup-0'),
+            ('rec-100-dup-2',  'rec-100-dup-1'),
+            {\ldots}
+            (  'rec-998-org',   'rec-1578-org'),
+            (  'rec-998-org',   'rec-2112-org'),
+            (  'rec-998-org',   'rec-2273-org'),
+            (  'rec-998-org',   'rec-2670-org'),
+            (  'rec-998-org',    'rec-305-org'),
+            (  'rec-998-org',    'rec-345-org'),
+            (  'rec-998-org',   'rec-3803-org'),
+            (  'rec-998-org',   'rec-3936-org'),
+            (  'rec-998-org',    'rec-622-org'),
+            (  'rec-999-org',   'rec-3297-org')],
+           names=['rec\_id\_1', 'rec\_id\_2'], length=50929)
+\end{Verbatim}
+    We show a pair of candidate links in order to verify that at least one
+of the values of the discriminating variables are equal.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}100}]:} \PY{n}{df}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{candidate\PYZus{}links}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}100}]:} given\_name              annabelle
+          surname                  friswell
+          street\_number                 205
+          address\_1            meares place
+          address\_2        sunningdale farm
+          suburb              wildes meadow
+          postcode                     7018
+          state                          wa
+          date\_of\_birth            19761129
+          soc\_sec\_id                9016980
+          Name: rec-0-org, dtype: object
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}101}]:} \PY{n}{df}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{candidate\PYZus{}links}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}101}]:} given\_name            michael
+          surname              shepherd
+          street\_number              70
+          address\_1        hurry nplace
+          address\_2            tintagel
+          suburb                penguin
+          postcode                 4179
+          state                     vic
+          date\_of\_birth        19761129
+          soc\_sec\_id            8270855
+          Name: rec-3741-dup-0, dtype: object
+\end{Verbatim}
+    \hypertarget{comparison}{%
+\subsubsection{Comparison}\label{comparison}}
+
+Also in this case, we used the same metrics and threshold used in the
+previous experiment.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+                            surname  address\_1  address\_2  given\_name  \textbackslash{}
+rec\_id\_1    rec\_id\_2                                                    
+rec-0-org   rec-3741-dup-0      0.0        0.0        0.0           0   
+            rec-3741-org        0.0        0.0        0.0           0   
+rec-10-org  rec-2162-org        1.0        0.0        0.0           0   
+            rec-343-org         1.0        0.0        0.0           0   
+            rec-956-org         1.0        0.0        0.0           0   
+{\ldots}                             {\ldots}        {\ldots}        {\ldots}         {\ldots}   
+rec-998-org rec-345-org         1.0        0.0        0.0           0   
+            rec-3803-org        1.0        0.0        0.0           0   
+            rec-3936-org        1.0        0.0        0.0           0   
+            rec-622-org         1.0        0.0        0.0           0   
+rec-999-org rec-3297-org        1.0        0.0        0.0           0   
+
+                            date\_of\_birth  suburb  state  
+rec\_id\_1    rec\_id\_2                                      
+rec-0-org   rec-3741-dup-0              1       0      0  
+            rec-3741-org                1       0      0  
+rec-10-org  rec-2162-org                0       0      0  
+            rec-343-org                 0       0      0  
+            rec-956-org                 0       0      0  
+{\ldots}                                   {\ldots}     {\ldots}    {\ldots}  
+rec-998-org rec-345-org                 0       0      1  
+            rec-3803-org                0       0      1  
+            rec-3936-org                0       0      0  
+            rec-622-org                 0       0      0  
+rec-999-org rec-3297-org                0       0      0  
+
+[50929 rows x 7 columns]
+\end{Verbatim}
+    \hypertarget{classification}{%
+\subsubsection{Classification}\label{classification}}
+
+We train our ML models in order to acquire knowledge to classify records
+in the test set, considering the weights of the attributes.
+
+    \hypertarget{deterministic-approach}{%
+\paragraph{Deterministic approach}\label{deterministic-approach}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \hypertarget{naive-bayes}{%
+\paragraph{Naive Bayes}\label{naive-bayes}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Initialise the NaiveBayesClassifier.}
+\PY{n}{nb} \PY{o}{=} \PY{n}{rl}\PY{o}{.}\PY{n}{NaiveBayesClassifier}\PY{p}{(}\PY{p}{)}
+\PY{n}{nb}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{features}\PY{p}{,} \PY{n}{true\PYZus{}links}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+p probability P(Match): 0.03769954250034364
+
+m probabilities P(x\_i=1|Match): \{'surname': \{0.0: 0.19739586485459734, 1.0: 0.8026041351454025\}, 'address\_1': \{0.0: 0.12031253955077714, 1.0: 0.879687460449223\}, 'address\_2': \{0.0: 0.2984375209960916, 1.0: 0.7015624790039081\}, 'given\_name': \{0.0: 0.3880208449978287, 1.0: 0.6119791550021711\}, 'date\_of\_birth': \{0.0: 0.13072920513237446, 1.0: 0.8692707948676252\}, 'suburb': \{0.0: 0.35468751513671715, 1.0: 0.645312484863283\}, 'state': \{0.0: 0.06197921229383207, 1.0: 0.9380207877061676\}\}
+
+u probabilities P(x\_i=1|Non-Match): \{'surname': \{0.0: 0.006304966409006646, 1.0: 0.9936950335909945\}, 'address\_1': \{0.0: 0.9959803281194052, 1.0: 0.004019671880594699\}, 'address\_2': \{0.0: 0.9986533065410298, 1.0: 0.0013466934589700125\}, 'given\_name': \{0.0: 0.9961435634428644, 1.0: 0.003856436557136706\}, 'date\_of\_birth': \{0.0: 0.9936746291755609, 1.0: 0.006325370824438895\}, 'suburb': \{0.0: 0.9990409904342437, 1.0: 0.0009590095657572717\}, 'state': \{0.0: 0.7887734894049123, 1.0: 0.2112265105950886\}\}
+
+weights of features: \{'surname': \{0.0: 31.3079962761764, 1.0: 0.8076966352996334\}, 'address\_1': \{0.0: 0.12079810830997982, 1.0: 218.84558903824646\}, 'address\_2': \{0.0: 0.29883996682469327, 1.0: 520.9518724034511\}, 'given\_name': \{0.0: 0.38952301579578924, 1.0: 158.6903209569583\}, 'date\_of\_birth': \{0.0: 0.13156137964480266, 1.0: 137.42606069972751\}, 'suburb': \{0.0: 0.3550279903755986, 1.0: 672.8947321330616\}, 'state': \{0.0: 0.07857669296237643, 1.0: 4.440828876372956\}\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \hypertarget{expectation-conditional-maximisation}{%
+\paragraph{Expectation-Conditional
+Maximisation}\label{expectation-conditional-maximisation}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Initialise the Expectation\PYZhy{}Conditional Maximisation classifier.}
+\PY{n}{ecm} \PY{o}{=} \PY{n}{rl}\PY{o}{.}\PY{n}{ECMClassifier}\PY{p}{(}\PY{p}{)}
+\PY{n}{ecm}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{features}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+p probability P(Match): 0.04422886741322979
+
+m probabilities P(x\_i=1|Match): \{'surname': \{0.0: 0.30542655786279255, 1.0: 0.694573442137208\}, 'address\_1': \{0.0: 0.2468825894881691, 1.0: 0.7531174105118315\}, 'address\_2': \{0.0: 0.40047239991837746, 1.0: 0.5995276000816229\}, 'given\_name': \{0.0: 0.4751710465591838, 1.0: 0.5248289534408166\}, 'date\_of\_birth': \{0.0: 0.12148308903836183, 1.0: 0.8785169109616388\}, 'suburb': \{0.0: 0.44839860553963623, 1.0: 0.551601394460364\}, 'state': \{0.0: 0.1612905703295032, 1.0: 0.8387094296704972\}\}
+
+u probabilities P(x\_i=1|Non-Match): \{'surname': \{0.0: 3.4736045678538596e-07, 1.0: 0.9999996526395413\}, 'address\_1': \{0.0: 0.9961053266705839, 1.0: 0.0038946733294151813\}, 'address\_2': \{0.0: 0.9987150895414244, 1.0: 0.0012849104585748773\}, 'given\_name': \{0.0: 0.9962650126166345, 1.0: 0.003734987383363294\}, 'date\_of\_birth': \{0.0: 0.9999976876787589, 1.0: 2.3123212408447907e-06\}, 'suburb': \{0.0: 0.9991063399654829, 1.0: 0.0008936600345149506\}, 'state': \{0.0: 0.7891428733450196, 1.0: 0.21085712665497933\}\}
+
+weights of features: \{'surname': \{0.0: 879278.4322353012, 1.0: 0.6945736834046412\}, 'address\_1': \{0.0: 0.24784787600058097, 1.0: 193.37113714359157\}, 'address\_2': \{0.0: 0.4009876331219353, 1.0: 466.59095665434324\}, 'given\_name': \{0.0: 0.47695245797217506, 1.0: 140.51692805671993\}, 'date\_of\_birth': \{0.0: 0.1214833699469386, 1.0: 379928.57369622134\}, 'suburb': \{0.0: 0.4487996798770464, 1.0: 617.2385170606351\}, 'state': \{0.0: 0.20438703278891002, 1.0: 3.97761955204321\}\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \hypertarget{evaluation}{%
+\subsubsection{Evaluation}\label{evaluation}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \hypertarget{part-2-testing}{%
+\subsection{Part 2 : Testing}\label{part-2-testing}}
+
+\hypertarget{dataset-description}{%
+\subsubsection{Dataset description}\label{dataset-description}}
+
+This data set contains 5000 records (2000 originals and 3000
+duplicates), with a maximum of 5 duplicates based on one original record
+(and a Zipf distribution of duplicate records). Distribution of
+duplicates: 168 originals records have 5 duplicate records 161 originals
+records have 4 duplicate records 212 originals records have 3 duplicate
+records 256 originals records have 2 duplicate records 368 originals
+records have 1 duplicate record 1835 originals records have no duplicate
+record.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Loading data{\ldots}
+5000 records in dataset A
+6538 links between dataset A and A
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+               given\_name    surname street\_number            address\_1  \textbackslash{}
+rec\_id                                                                    
+rec-1496-org     mitchell      green             7        wallaby place   
+rec-552-dup-3      harley   mccarthy           177        pridhamstreet   
+rec-988-dup-1    madeline      mason            54      hoseason street   
+rec-1716-dup-1   isabelle        NaN            23        gundulu place   
+rec-1213-org       taylor   hathaway             7       yuranigh court   
+{\ldots}                   {\ldots}        {\ldots}           {\ldots}                  {\ldots}   
+rec-937-org          jack   campbell           169          marr street   
+rec-1200-dup-0    william   lazaroff            12           leah ylose   
+rec-1756-org     destynii   bowerman            12     halford crescent   
+rec-1444-org       gianni     dooley            38    ashburton circuit   
+rec-993-dup-0        jake  westbrook           231  booroondar a street   
+
+                             address\_2          suburb postcode state  \textbackslash{}
+rec\_id                                                                  
+rec-1496-org                    delmar       cleveland     2119    sa   
+rec-552-dup-3                   milton         marsden     3165   nsw   
+rec-988-dup-1   lakefront retrmnt vlge       granville     4881   nsw   
+rec-1716-dup-1               currin ga        utakarra     2193    wa   
+rec-1213-org            brentwood vlge             NaN     4220   nsw   
+{\ldots}                                {\ldots}             {\ldots}      {\ldots}   {\ldots}   
+rec-937-org                   rhosewyn        oakleigh     3356   vic   
+rec-1200-dup-0                milwlood          forbes     7256   qld   
+rec-1756-org                    sutton       nollamara     2431   qld   
+rec-1444-org            brentwood vlge            ryde     6025   qld   
+rec-993-dup-0                  jodayne  salisbury east     2074   nsw   
+
+               date\_of\_birth soc\_sec\_id  
+rec\_id                                   
+rec-1496-org        19560409    1804974  
+rec-552-dup-3       19080419    6089216  
+rec-988-dup-1       19081128    2185997  
+rec-1716-dup-1      19921119    4314184  
+rec-1213-org        19991207    9144092  
+{\ldots}                      {\ldots}        {\ldots}  
+rec-937-org         19770109    1485686  
+rec-1200-dup-0           NaN    8072193  
+rec-1756-org        19880821    6089424  
+rec-1444-org        19371212    5854405  
+rec-993-dup-0       19001115    2330929  
+
+[5000 rows x 10 columns]
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \hypertarget{indexing}{%
+\subsubsection{Indexing}\label{indexing}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{candidate\PYZus{}links} \PY{o}{=} \PY{n}{indexing\PYZus{}dataset}\PY{p}{(}\PY{n}{df}\PY{p}{,} \PY{k+kc}{None}\PY{p}{,} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{surname}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{date\PYZus{}of\PYZus{}birth}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{soc\PYZus{}sec\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{candidate\PYZus{}links}
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+MultiIndex([(   'rec-1-org', 'rec-1963-dup-0'),
+            (   'rec-1-org',  'rec-567-dup-1'),
+            (   'rec-1-org',  'rec-910-dup-1'),
+            ('rec-10-dup-0',   'rec-10-dup-2'),
+            ('rec-10-dup-1',   'rec-10-dup-0'),
+            ('rec-10-dup-1',   'rec-10-dup-2'),
+            ('rec-10-dup-1', 'rec-1411-dup-0'),
+            ('rec-10-dup-1', 'rec-1411-dup-1'),
+            ('rec-10-dup-1', 'rec-1411-dup-2'),
+            ('rec-10-dup-1',   'rec-1411-org'),
+            {\ldots}
+            ( 'rec-997-org',   'rec-66-dup-0'),
+            ( 'rec-997-org',     'rec-66-org'),
+            ( 'rec-997-org',  'rec-724-dup-0'),
+            ( 'rec-997-org',  'rec-724-dup-4'),
+            ( 'rec-997-org',    'rec-724-org'),
+            ( 'rec-997-org',    'rec-849-org'),
+            ( 'rec-997-org',  'rec-997-dup-0'),
+            ( 'rec-999-org',    'rec-234-org'),
+            ( 'rec-999-org',  'rec-679-dup-1'),
+            ( 'rec-999-org',    'rec-679-org')],
+           names=['rec\_id\_1', 'rec\_id\_2'], length=40470)
+\end{Verbatim}
+    \hypertarget{comparison}{%
+\subsubsection{Comparison}\label{comparison}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+                             surname  address\_1  address\_2  given\_name  \textbackslash{}
+rec\_id\_1     rec\_id\_2                                                    
+rec-1-org    rec-1963-dup-0      1.0        0.0        0.0           0   
+             rec-567-dup-1       1.0        0.0        0.0           0   
+             rec-910-dup-1       1.0        0.0        0.0           0   
+rec-10-dup-0 rec-10-dup-2        0.0        0.0        1.0           0   
+rec-10-dup-1 rec-10-dup-0        0.0        0.0        1.0           0   
+{\ldots}                              {\ldots}        {\ldots}        {\ldots}         {\ldots}   
+rec-997-org  rec-849-org         1.0        0.0        0.0           0   
+             rec-997-dup-0       1.0        1.0        1.0           0   
+rec-999-org  rec-234-org         1.0        0.0        0.0           0   
+             rec-679-dup-1       1.0        0.0        0.0           0   
+             rec-679-org         1.0        0.0        0.0           0   
+
+                             date\_of\_birth  suburb  state  
+rec\_id\_1     rec\_id\_2                                      
+rec-1-org    rec-1963-dup-0              0       0      0  
+             rec-567-dup-1               0       0      1  
+             rec-910-dup-1               0       0      1  
+rec-10-dup-0 rec-10-dup-2                1       1      1  
+rec-10-dup-1 rec-10-dup-0                1       1      1  
+{\ldots}                                    {\ldots}     {\ldots}    {\ldots}  
+rec-997-org  rec-849-org                 0       0      1  
+             rec-997-dup-0               1       1      1  
+rec-999-org  rec-234-org                 0       0      0  
+             rec-679-dup-1               0       0      0  
+             rec-679-org                 0       0      0  
+
+[40470 rows x 7 columns]
+\end{Verbatim}
+    \hypertarget{classification}{%
+\subsubsection{Classification}\label{classification}}
+
+\hypertarget{deterministic-approach}{%
+\paragraph{Deterministic approach}\label{deterministic-approach}}
+
+    We consider a match all the pairs that agree on at least 4 attributes.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+7.0      969
+6.0     2066
+5.0     1955
+4.0     1007
+3.0      451
+2.0     6929
+1.0    27093
+dtype: int64
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+                             surname  address\_1  address\_2  given\_name  \textbackslash{}
+rec\_id\_1      rec\_id\_2                                                   
+rec-10-dup-0  rec-10-dup-2       0.0        0.0        1.0           0   
+rec-10-dup-1  rec-10-dup-0       0.0        0.0        1.0           0   
+              rec-10-dup-2       1.0        0.0        1.0           0   
+rec-10-org    rec-10-dup-0       0.0        1.0        1.0           0   
+              rec-10-dup-1       1.0        0.0        1.0           0   
+{\ldots}                              {\ldots}        {\ldots}        {\ldots}         {\ldots}   
+rec-995-dup-0 rec-995-org        1.0        1.0        1.0           1   
+rec-996-dup-1 rec-996-dup-0      1.0        1.0        1.0           0   
+rec-996-org   rec-996-dup-0      1.0        1.0        1.0           0   
+              rec-996-dup-1      1.0        1.0        1.0           1   
+rec-997-org   rec-997-dup-0      1.0        1.0        1.0           0   
+
+                             date\_of\_birth  suburb  state  
+rec\_id\_1      rec\_id\_2                                     
+rec-10-dup-0  rec-10-dup-2               1       1      1  
+rec-10-dup-1  rec-10-dup-0               1       1      1  
+              rec-10-dup-2               1       1      1  
+rec-10-org    rec-10-dup-0               1       1      1  
+              rec-10-dup-1               1       1      1  
+{\ldots}                                    {\ldots}     {\ldots}    {\ldots}  
+rec-995-dup-0 rec-995-org                1       1      1  
+rec-996-dup-1 rec-996-dup-0              1       0      1  
+rec-996-org   rec-996-dup-0              1       1      1  
+              rec-996-dup-1              1       0      1  
+rec-997-org   rec-997-dup-0              1       1      1  
+
+[5997 rows x 7 columns]
+\end{Verbatim}
+    \hypertarget{naive-bayes}{%
+\paragraph{Naive Bayes}\label{naive-bayes}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Predicted number of links: 6428
+
+    \end{Verbatim}
+
+    \hypertarget{expectation-conditional-maximisation}{%
+\paragraph{Expectation-Conditional
+Maximisation}\label{expectation-conditional-maximisation}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Predicted number of links: 6750
+
+    \end{Verbatim}
+
+    \hypertarget{comparison}{%
+\subsubsection{Comparison}\label{comparison}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Deterministic approach 
+
+Confusion matrix: 
+ [[ 5997   541]
+ [    0 33932]]
+Fscore: 0.9568408456322298
+Recall: 0.9172529825634751
+Precision: 1.0
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Naive Bayes 
+
+Confusion matrix: 
+ [[ 6364   174]
+ [   64 33868]]
+Fscore: 0.9816443004781737
+Recall: 0.9733863566840012
+Precision: 0.9900435594275047
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Expectation-Conditional Maximisation 
+
+Confusion matrix: 
+ [[ 6436   102]
+ [  314 33618]]
+Fscore: 0.9686935580975315
+Recall: 0.9843988987457938
+Precision: 0.9534814814814815
+
+    \end{Verbatim}
+
+    \hypertarget{results-analysis}{%
+\subsection{Results analysis}\label{results-analysis}}
+
+We conclude that our approach is viabile as shown by the confusion
+matrices, however it necessitates the true links, which may not be
+always available (or may require the manpower to do so).
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
