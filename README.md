@@ -14,6 +14,3 @@ We provide:
 - A pdf relation we obtained from the notebook (we recommend just using the notebook since it might be easier to read)
 - The slides to be shown during the project presentation
 - The datasets used are integrated into the library and therefore not provided, we give an in-depth description for each one in the notebook
-
-**Link to GitLab repository:** [click here](https://gitlab.com/mattia-vincenzi/progettoarchitetturedati)
-
