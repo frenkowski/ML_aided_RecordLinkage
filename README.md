@@ -10,7 +10,7 @@ Record Linkage is the process of finding records in one or more datasets that re
 
 ## Project structure
 We provide:
-- A Jupyter notebook containing our project (Code + Step by step comments and explaination)
-- A pdf relation we obtained from the notebook (we recommend just using the notebook since it might be easier to read)
-- The slides to be shown during the project presentation
-- The datasets used are integrated into the library and therefore not provided, we give an in-depth description for each one in the notebook
+- A Jupyter Notebook containing our *project* (code + step by step comments and explaination);
+- A PDF relation we obtained from the notebook (we recommend just using the notebook since it might be easier to read);
+- The slides to be shown during the project presentation;
+- The datasets used are integrated into the library and therefore not provided, we give an in-depth description for each one in the notebook.
